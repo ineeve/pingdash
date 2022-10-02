@@ -15,16 +15,17 @@ class SystemWidget extends StatefulWidget {
 }
 
 class _SystemWidgetState extends State<SystemWidget> {
-  final Color lineColor = Colors.amber;
+  Color lineColor = Colors.amber;
   late Ping _ping;
   List<int> _seqs = [];
   List<FlSpot> _latencies = [];
-  String _latency = '-1';
+  String _latency = '0';
   String _seq = '0';
-  String _errorString = '';
+
   final TextEditingController _titleController = TextEditingController();
   final limitCount = 60;
   bool _mute = false;
+  bool _inError = false;
 
   @override
   void initState() {
@@ -34,16 +35,20 @@ class _SystemWidgetState extends State<SystemWidget> {
 
     // Begin ping process and listen for output
     _ping.stream.listen((event) {
+      if (!mounted) return; // return if this widget is not mounted
       if (event.error != null) {
         if (!_mute) {
           SystemSound.play(SystemSoundType.alert);
         }
-        setState(() {
-          _errorString = event.error!.message ?? '';
-        });
+        if (!_inError) {
+          setState(() {
+            _inError = true;
+          });
+        }
         return;
       }
       setState(() {
+        _inError = false;
         _latency = event.response?.time!.inMilliseconds.toString() ?? "-1";
         _seq = event.response?.seq.toString() ?? "-1";
 
@@ -75,7 +80,7 @@ class _SystemWidgetState extends State<SystemWidget> {
         show: false,
       ),
       gradient: LinearGradient(
-          colors: [lineColor.withOpacity(0), lineColor],
+          colors: [lineColor.withOpacity(0.4), lineColor],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
           stops: const [0.1, 1.0]),
@@ -97,12 +102,13 @@ class _SystemWidgetState extends State<SystemWidget> {
 
   @override
   Widget build(BuildContext context) {
+    lineColor = Theme.of(context).colorScheme.primary;
     return Container(
         padding: const EdgeInsets.all(8),
         alignment: Alignment.center,
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: _inError ? Colors.red : Colors.white,
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
@@ -133,12 +139,6 @@ class _SystemWidgetState extends State<SystemWidget> {
                 },
                 icon: const Icon(Icons.delete)),
           ]),
-          _errorString.isNotEmpty
-              ? Text(
-                  _errorString,
-                  style: const TextStyle(color: Colors.red, fontSize: 16),
-                )
-              : const SizedBox.shrink(),
           Row(
             children: [
               const Text("Seq: "),
