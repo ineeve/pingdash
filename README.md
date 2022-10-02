@@ -5,11 +5,11 @@ Simple cross-platform app to monitor multiple remote systems using the operating
 
 If there's an ICMP timeout, the system will sound an alarm (only available on the desktop app). The alarm can be configured per system. 
 
+![screenshot](snap/gui/pingdash-screenshot.png)
 
-Thanks to $dart_ping for making this possible.
 
 ## Download
-- Linux: The app is available through the snapstore
+- Linux: The app is available through the [snapstore](https://snapcraft.io/pingdash)
 
 ## Donations
 https://www.buymeacoffee.com/ineeve
@@ -25,3 +25,5 @@ Contributions are welcomed via pull requests.
 2. `snapcraft login`
 3. `snapcraft upload --release=<channel> <file>.snap`
 
+## Credits
+Thanks to [dart_ping](https://pub.dev/packages/dart_ping) for making this project possible.
