@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=PingDash
+Comment=Remote Monitoring Made Simple
+Exec=pingdash 
+Icon=${SNAP}/meta/gui/pingdash.png
+Terminal=false
+Type=Application
+Categories=System;

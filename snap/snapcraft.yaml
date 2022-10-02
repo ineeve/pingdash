@@ -1,0 +1,31 @@
+name: pingdash
+version: 0.1.0
+summary: Monitor multiple remote systems
+description: Simple cross-platform app to monitor multiple remote systems using the operating system ping command.
+
+confinement: strict
+base: core18
+grade: stable
+
+environment:
+  PATH: $SNAP/bin:$SNAP/usr/bin:$PATH
+    
+apps:
+  pingdash:
+    command: pingdash
+    extensions: [flutter-master] # Where "master" defines which Flutter channel to use for the build
+    plugs:
+    - network
+    - network-bind
+    - audio-playback
+
+parts:
+  pingdash:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart # The main entry-point file of the application
+    stage-packages: 
+      - iputils-ping
+    build-packages:
+      - iputils-ping
+  
