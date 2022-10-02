@@ -1,5 +1,5 @@
 name: pingdash
-version: 0.1.0
+version: 0.1.1
 summary: Monitor multiple remote systems
 description: Simple cross-platform app to monitor multiple remote systems using the operating system ping command.
 
